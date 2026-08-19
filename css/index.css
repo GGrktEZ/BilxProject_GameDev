@@ -34,7 +34,7 @@ section.hero {
   text-align: center;
 }
 section.hero {
-  background-image: url(./images/background.jpg);
+  background-image: url(/BilxProject_GameDev/images/freeman.jpg);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
