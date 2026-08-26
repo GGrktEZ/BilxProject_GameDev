@@ -1,81 +1,140 @@
+// ---------------------------------------------------------------------------
+// Flappy Bird - the Christians move in from the right, the bird falls down
+// unless the player holds the space bar.
+//
+// The numbers below are the ones the game was built with. Changing them makes
+// the game easier or harder.
+// ---------------------------------------------------------------------------
+const CHRISTIAN_IMAGE = "./../GameAssests/FlappyBird/christi.png";
+const CHRISTIAN_SPAWN_LEFT = "75vw"; // where a new pair appears
+const CHRISTIAN_LOWEST = 80; // lowest the bottom Christian can sit, in vh
+const CHRISTIAN_HIGHEST = 45; // highest the bottom Christian can sit, in vh
+const CHRISTIAN_GAP = 75; // how far above the bottom one the top one hangs
+const CHRISTIAN_STEP = 2; // pixels a Christian moves left per step
+const CHRISTIAN_DELAY = 10; // milliseconds between two steps
+
+const BIRD_FALL_STEP = 6; // pixels the bird falls per step
+const BIRD_FLAP_STEP = 6; // pixels the bird rises per step while flapping
+const BIRD_DELAY = 20; // milliseconds between two steps
+
+const CHRISTIAN_TOP_ID = "ChristianTopPipe";
+const CHRISTIAN_BOTTOM_ID = "ChristianBottomPipe";
+
+// ---------------------------------------------------------------------------
+// State
+// ---------------------------------------------------------------------------
+
+/** True for as long as the player holds the space bar down. */
+let isSpacePressed = false;
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
 /**
- * Slleps for a given amount of milisecs.
+ * Sleeps for a given amount of milliseconds.
  *
- * @param   ms  The amount of milisecs to sleep.
+ * @param   ms  The amount of milliseconds to sleep.
  */
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function spawnChristiansPipes() {
-  const LowestChristian = 80;
-  const HighestChristian = 45;
+/**
+ * Creates one Christian image and puts it on the page.
+ *
+ * @param   id          The id the image gets, so we can find it again.
+ * @param   topInVh     Distance from the top of the screen, in vh.
+ * @param   upsideDown  True for the Christian hanging from the ceiling.
+ */
+function createChristian(id, topInVh, upsideDown) {
+  const christian = document.createElement("img");
+  christian.id = id;
+  christian.src = CHRISTIAN_IMAGE;
+  christian.style.position = "absolute";
+  christian.style.left = CHRISTIAN_SPAWN_LEFT;
+  christian.style.top = topInVh + "vh";
 
-  const DoubleChristHeight =
-    Math.floor(Math.random() * (LowestChristian - HighestChristian + 1)) +
-    HighestChristian;
+  if (upsideDown) {
+    christian.style.rotate = "180deg";
+    christian.style.transform = "scaleX(-1)";
+  }
 
-  const ChristianTop = document.createElement("img");
-  ChristianTop.src = "./../GameAssests/FlappyBird/christi.png";
-  ChristianTop.style.position = "absolute";
-  ChristianTop.style.left = "75vw";
-  ChristianTop.style.top = DoubleChristHeight - 75 + "vh";
-  ChristianTop.id = "ChristianTopPipe";
-  ChristianTop.style.rotate = "180deg";
-  ChristianTop.style.transform = "scaleX(-1)";
-  let ChristianTopElement = document.body.appendChild(ChristianTop);
-
-  const ChristianBot = document.createElement("img");
-  ChristianBot.src = "./../GameAssests/FlappyBird/christi.png";
-  ChristianBot.style.position = "absolute";
-  ChristianBot.style.left = "75vw";
-  ChristianBot.style.top = DoubleChristHeight + "vh";
-  ChristianBot.id = "ChristianBottomPipe";
-  let ChristianBotElement = document.body.appendChild(ChristianBot);
+  document.body.appendChild(christian);
 }
 
+// ---------------------------------------------------------------------------
+// Game
+// ---------------------------------------------------------------------------
+
+/**
+ * Spawns a new pair of Christians at a random height.
+ */
+function spawnChristianPipes() {
+  const bottomInVh =
+    Math.floor(Math.random() * (CHRISTIAN_LOWEST - CHRISTIAN_HIGHEST + 1)) +
+    CHRISTIAN_HIGHEST;
+
+  createChristian(CHRISTIAN_TOP_ID, bottomInVh - CHRISTIAN_GAP, true);
+  createChristian(CHRISTIAN_BOTTOM_ID, bottomInVh, false);
+}
+
+/**
+ * Moves the current pair of Christians to the left until they leave the
+ * screen, then removes them and starts over with a new pair.
+ */
 async function moveChristianPipes() {
-  const ChristianTop = document.getElementById("ChristianTopPipe");
-  const ChristianBot = document.getElementById("ChristianBottomPipe");
-  while (ChristianBot.offsetLeft + ChristianBot.clientWidth > 0) {
-    await sleep(10);
-    ChristianTop.style.left = ChristianTop.offsetLeft - 2 + "px";
-    ChristianBot.style.left = ChristianBot.offsetLeft - 2 + "px";
+  const christianTop = document.getElementById(CHRISTIAN_TOP_ID);
+  const christianBottom = document.getElementById(CHRISTIAN_BOTTOM_ID);
+
+  while (christianBottom.offsetLeft + christianBottom.clientWidth > 0) {
+    await sleep(CHRISTIAN_DELAY);
+    christianTop.style.left = christianTop.offsetLeft - CHRISTIAN_STEP + "px";
+    christianBottom.style.left =
+      christianBottom.offsetLeft - CHRISTIAN_STEP + "px";
   }
-  ChristianBot.remove();
-  ChristianTop.remove();
-  spawnChristiansPipes();
+
+  christianBottom.remove();
+  christianTop.remove();
+
+  spawnChristianPipes();
   moveChristianPipes();
 }
 
-async function dropbird() {
+/**
+ * Lets the bird fall down step by step - or rise, while space is held.
+ */
+async function dropBird() {
   const bird = document.getElementById("bird_img");
-  let isSpacePressed = false;
-  
-  document.addEventListener('keydown', (e) => {
-    if (e.code === "Space") {
-      isSpacePressed = true;
-    }
-  });
-  
-  document.addEventListener('keyup', (e) => {
-    if (e.code === "Space") {
-      isSpacePressed = false;
-    }
-  });
-  
-  while(bird.offsetTop + bird.clientHeight  < window.innerHeight) {
-    await sleep(20);
+
+  while (bird.offsetTop + bird.clientHeight < window.innerHeight) {
+    await sleep(BIRD_DELAY);
+
     if (isSpacePressed) {
-      bird.style.top = bird.offsetTop - 6 + "px";
+      bird.style.top = bird.offsetTop - BIRD_FLAP_STEP + "px";
     } else {
-      bird.style.top = bird.offsetTop + 6  + "px";
+      bird.style.top = bird.offsetTop + BIRD_FALL_STEP + "px";
     }
   }
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  spawnChristiansPipes();
+// ---------------------------------------------------------------------------
+// Events - this is where the game starts.
+// ---------------------------------------------------------------------------
+document.addEventListener("keydown", (event) => {
+  if (event.code === "Space") {
+    isSpacePressed = true;
+  }
+});
+
+document.addEventListener("keyup", (event) => {
+  if (event.code === "Space") {
+    isSpacePressed = false;
+  }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  spawnChristianPipes();
   moveChristianPipes();
-  dropbird();
+  dropBird();
 });
