@@ -8,13 +8,17 @@ const CHRISTIAN_GAP_SIZE = 75; // how far above the gap the top Christian sits
 const CHRISTIAN_STEP = 2; // pixels the Christians move left per step
 const CHRISTIAN_DELAY = 10; // milliseconds between two steps
 
-const BIRD_STEP = 2; // pixels the bird falls per step
+const BIRD_FALL_STEP = 10; // pixels the bird falls per step
+const BIRD_FLAP_STEP = 10; // pixels the bird rises per step while flapping
 const BIRD_DELAY = 20; // milliseconds between two steps
 
 // ---------------------------------------------------------------------------
-// Elements we need again and again.
+// Elements and state we need again and again.
 // ---------------------------------------------------------------------------
 const bird = document.getElementById("bird_img");
+
+// True for as long as the player holds the space bar down.
+let isSpacePressed = false;
 
 /**
  * Sleeps for a given amount of milliseconds.
@@ -83,20 +87,35 @@ async function moveChristians() {
 }
 
 /**
- * Lets the bird fall down step by step.
+ * Lets the bird fall down step by step - or rise, while space is held.
  */
 async function dropBird() {
   while (bird.offsetTop + bird.clientHeight > 0) {
     await sleep(BIRD_DELAY);
-    bird.style.top = bird.offsetTop + BIRD_STEP + "px";
-  }
 
-  bird.remove();
+    if (isSpacePressed) {
+      bird.style.top = bird.offsetTop - BIRD_FLAP_STEP + "px";
+    } else {
+      bird.style.top = bird.offsetTop + BIRD_FALL_STEP + "px";
+    }
+  }
 }
 
 // ---------------------------------------------------------------------------
 // Events - this is where the game starts.
 // ---------------------------------------------------------------------------
+document.addEventListener("keydown", function (event) {
+  if (event.code === "Space") {
+    isSpacePressed = true;
+  }
+});
+
+document.addEventListener("keyup", function (event) {
+  if (event.code === "Space") {
+    isSpacePressed = false;
+  }
+});
+
 document.addEventListener("DOMContentLoaded", function () {
   spawnChristians();
   moveChristians();
