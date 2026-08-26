@@ -8,8 +8,8 @@ const CHRISTIAN_GAP_SIZE = 75; // how far above the gap the top Christian sits
 const CHRISTIAN_STEP = 2; // pixels the Christians move left per step
 const CHRISTIAN_DELAY = 10; // milliseconds between two steps
 
-const BIRD_FALL_STEP = 10; // pixels the bird falls per step
-const BIRD_FLAP_STEP = 10; // pixels the bird rises per step while flapping
+const BIRD_FALL_STEP = 6; // pixels the bird falls per step
+const BIRD_FLAP_STEP = 6; // pixels the bird rises per step while flapping
 const BIRD_DELAY = 20; // milliseconds between two steps
 
 // ---------------------------------------------------------------------------
@@ -90,7 +90,7 @@ async function moveChristians() {
  * Lets the bird fall down step by step - or rise, while space is held.
  */
 async function dropBird() {
-  while (bird.offsetTop + bird.clientHeight > 0) {
+  while (bird.offsetTop + bird.clientHeight < window.innerHeight) {
     await sleep(BIRD_DELAY);
 
     if (isSpacePressed) {
