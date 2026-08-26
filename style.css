@@ -9,3 +9,9 @@ nav {
   display: flex;
   justify-content: center;
 }
+#bird_img {
+  top: 350px;
+  position: absolute;
+  width: 125px;
+  height: 100px;
+}
