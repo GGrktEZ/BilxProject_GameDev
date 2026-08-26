@@ -46,8 +46,6 @@ async function moveChristianPipes() {
   ChristianTop.remove();
   spawnChristiansPipes();
   moveChristianPipes();
-  spawnChristiansPipes();
-  moveChristianPipes();
 }
 
 async function dropbird() {
@@ -66,12 +64,12 @@ async function dropbird() {
     }
   });
   
-  while(bird.offsetTop + bird.clientHeight > 0) {
+  while(bird.offsetTop + bird.clientHeight  < window.innerHeight) {
     await sleep(20);
     if (isSpacePressed) {
-      bird.style.top = bird.offsetTop - 10 + "px";
+      bird.style.top = bird.offsetTop - 6 + "px";
     } else {
-      bird.style.top = bird.offsetTop + 10 + "px";
+      bird.style.top = bird.offsetTop + 6  + "px";
     }
   }
 }
