@@ -60,6 +60,8 @@ async function moveChristianPipes() {
   }
   ChristianBot.remove();
   ChristianTop.remove();
+  spawnChristiansPipes();
+  moveChristianPipes();
 }
 
 document.addEventListener("DOMContentLoaded", function () {
