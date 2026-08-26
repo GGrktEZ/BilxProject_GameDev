@@ -46,24 +46,38 @@ async function moveChristianPipes() {
   ChristianTop.remove();
   spawnChristiansPipes();
   moveChristianPipes();
+  spawnChristiansPipes();
+  moveChristianPipes();
+}
+
+async function dropbird() {
+  const bird = document.getElementById("bird_img");
+  let isSpacePressed = false;
+  
+  document.addEventListener('keydown', (e) => {
+    if (e.code === "Space") {
+      isSpacePressed = true;
+    }
+  });
+  
+  document.addEventListener('keyup', (e) => {
+    if (e.code === "Space") {
+      isSpacePressed = false;
+    }
+  });
+  
+  while(bird.offsetTop + bird.clientHeight > 0) {
+    await sleep(20);
+    if (isSpacePressed) {
+      bird.style.top = bird.offsetTop - 10 + "px";
+    } else {
+      bird.style.top = bird.offsetTop + 10 + "px";
+    }
+  }
 }
 
 document.addEventListener("DOMContentLoaded", function () {
   spawnChristiansPipes();
-});
-
-document.addEventListener("keydown", function (event) {
   moveChristianPipes();
   dropbird();
 });
-
-const bird = document.getElementById("bird_img");
-async function dropbird() {
-  console.log("test")
-  while(bird.offsetTop + bird.clientHeight > 0) {
-    await sleep (20);
-    bird.style.top = bird.offsetTop + 2 + "px";
-  } 
-   bird.remove();
-};
-
