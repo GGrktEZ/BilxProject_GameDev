@@ -9,10 +9,9 @@ Open `index.html` in a browser, or start it with the VS Code extension
 
 ## Games
 
-- **Game 1 - Flappy Christian** (`Games/Game1.html`)
-  Press Space or click to flap. Fly through the gaps between the Christians.
-  One point for every pair you get past. Touching a Christian or the floor
-  ends the round, Space starts a new one.
+- **Game 1 - Flappy Bird** (`Games/Game1.html`)
+  Hold the space bar to fly up, let go to fall. The Christians move past
+  from the right.
 - **Game 2** (`Games/Game2.html`) - still empty.
 
 ## Where things are
@@ -22,17 +21,11 @@ index.html                 the start page with the two game links
 css/index.css              styles for the start page
 css/flappy.css             styles for Game 1
 Games/Game1.html           Game 1
-Games/FlappyLogic.js       all of the Game 1 logic
+Games/FlappyLogic.js       the Game 1 logic
 Games/Game2.html           Game 2 (empty for now)
 GameAssests/FlappyBird/    bird, Christian and background images
 images/                    logo and start page background
 ```
-
-## Making the game easier or harder
-
-Every number you can tune sits in the settings block at the top of
-`Games/FlappyLogic.js`. A bigger `CHRISTIAN_GAP` or a smaller
-`CHRISTIAN_SPEED` makes the game easier.
 
 ## Two rules that keep it working on all our computers
 
