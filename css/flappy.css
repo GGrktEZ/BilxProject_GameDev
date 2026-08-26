@@ -1,0 +1,89 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  font-family: system-ui, sans-serif;
+}
+
+/* The playing field. Everything in the game is placed inside of it. */
+#game {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-image: url("../GameAssests/FlappyBird/background.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Size and position of the bird come from FlappyLogic.js. */
+#bird_img {
+  z-index: 2;
+}
+
+/* One Christian. The height is set per Christian by FlappyLogic.js, so the
+   image is cropped instead of squashed. */
+.christian {
+  position: absolute;
+  object-fit: cover;
+  z-index: 1;
+}
+
+#score {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  text-align: center;
+  font-size: 64px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.6);
+  z-index: 3;
+}
+
+#message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 30px 50px;
+  border-radius: 12px;
+  text-align: center;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.65);
+  z-index: 4;
+}
+
+#message h1 {
+  margin: 0 0 10px 0;
+  color: darkmagenta;
+  font-size: 40px;
+}
+
+#message p {
+  margin: 0;
+  font-size: 20px;
+}
+
+/* FlappyLogic.js adds this class to hide the message while playing. */
+.hidden {
+  display: none;
+}
+
+.back_link {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  color: #00bcd4;
+  background-color: rgba(0, 0, 0, 0.55);
+  text-decoration: none;
+  z-index: 5;
+}

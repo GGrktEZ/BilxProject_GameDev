@@ -1,0 +1,56 @@
+body {
+  margin: 0;
+}
+div.header_container {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 20px;
+  flex-wrap: wrap;
+  font-size: 26px;
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  gap: 200px;
+}
+img.logo {
+  width: auto;
+  height: 160px;
+  max-width: 100%;
+  margin-right: 10px;
+}
+h1 {
+  color: purple;
+}
+html {
+  scroll-behavior: smooth;
+}
+section.hero {
+  text-align: center;
+}
+section.hero {
+  background-image: url(../images/freeman.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  height: 1000px;
+}
+div.hero_container {
+  display: flex;
+  color: #00bcd4;
+  font-size: 40px;
+  padding-top: 300px;
+  align-items: center;
+  flex-direction: column;
+}
+ul {
+  list-style: none;
+  text-decoration: none;
+  display: flex;
+  justify-content: space-between;
+}
+a {
+  text-decoration: none;
+  color: #00bcd4;
+}

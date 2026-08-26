@@ -3,29 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="/style.css" />
-    <style>
-      html,
-      body {
-        height: 100%;
-        margin: 0;
-        overflow: hidden;
-      }
-      body {
-        background-image: url("./../GameAssests/FlappyBird/background.jpg");
-        background-size: cover;
-        background-repeat: no-repeat;
-      }
-    </style>
+    <title>Flappy Christian</title>
+    <link rel="stylesheet" href="./../css/flappy.css" />
   </head>
+
   <body>
-    <h1>Flappy Bird</h1>
-    <img
-      src="/GameAssests/FlappyBird/bird.png"
-      alt="Image of Flappy Bird"
-      id="bird_img"
-    />
+    <div id="game">
+      <img
+        src="./../GameAssests/FlappyBird/bird.png"
+        alt="Image of Flappy Bird"
+        id="bird_img"
+      />
+      <p id="score">0</p>
+      <div id="message">
+        <h1 id="message_title">Flappy Christian</h1>
+        <p id="message_text">Press Space to start</p>
+      </div>
+      <a class="back_link" href="./../index.html">&larr; Back to the games</a>
+    </div>
+
+    <script src="./FlappyLogic.js" defer></script>
   </body>
-  <script src="flappylogic.js"></script>
 </html>
