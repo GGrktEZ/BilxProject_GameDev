@@ -68,4 +68,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
 document.addEventListener("keydown", function (event) {
   moveChristianPipes();
+  dropbird();
 });
+
+const bird = document.getElementById("bird_img");
+async function dropbird() {
+  console.log("test")
+  while(bird.offsetTop + bird.clientHeight > 0) {
+    await sleep (20);
+    bird.style.top = bird.offsetTop + 2 + "px";
+  } 
+   bird.remove();
+};
+
