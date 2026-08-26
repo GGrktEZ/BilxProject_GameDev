@@ -6,7 +6,7 @@
 // the game easier or harder.
 // ---------------------------------------------------------------------------
 const CHRISTIAN_IMAGE = "./../GameAssests/FlappyBird/christi.png";
-const CHRISTIAN_SPAWN_LEFT = "75vw"; // where a new pair appears
+const CHRISTIAN_SPAWN_LEFT = "100vw"; // where a new pair appears
 const CHRISTIAN_LOWEST = 80; // lowest the bottom Christian can sit, in vh
 const CHRISTIAN_HIGHEST = 45; // highest the bottom Christian can sit, in vh
 const CHRISTIAN_GAP = 75; // how far above the bottom one the top one hangs
@@ -16,6 +16,7 @@ const CHRISTIAN_DELAY = 10; // milliseconds between two steps
 const BIRD_FALL_STEP = 6; // pixels the bird falls per step
 const BIRD_FLAP_STEP = 6; // pixels the bird rises per step while flapping
 const BIRD_DELAY = 20; // milliseconds between two steps
+const BIRD_SPAWN_LEFT = "5vw"; // position of bird
 
 const CHRISTIAN_TOP_ID = "ChristianTopPipe";
 const CHRISTIAN_BOTTOM_ID = "ChristianBottomPipe";
@@ -106,6 +107,7 @@ async function moveChristianPipes() {
  */
 async function dropBird() {
   const bird = document.getElementById("bird_img");
+  bird.style.left = BIRD_SPAWN_LEFT;
 
   while (bird.offsetTop + bird.clientHeight < window.innerHeight) {
     await sleep(BIRD_DELAY);
