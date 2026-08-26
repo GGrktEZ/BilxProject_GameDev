@@ -27,6 +27,10 @@ const CHRISTIAN_BOTTOM_ID = "ChristianBottomPipe";
 /** True for as long as the player holds the space bar down. */
 let isSpacePressed = false;
 
+/** The current score for the game. Based on Time Survived */
+let gameScore = 0;
+
+
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
@@ -118,6 +122,14 @@ async function dropBird() {
   }
 }
 
+async function updateScore() {
+  while (true) {
+    await sleep(1000);
+    gameScore++;
+    console.log("Score: " + gameScore);
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Events - this is where the game starts.
 // ---------------------------------------------------------------------------
@@ -134,6 +146,7 @@ document.addEventListener("keyup", (event) => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+  updateScore();
   spawnChristianPipes();
   moveChristianPipes();
   dropBird();
