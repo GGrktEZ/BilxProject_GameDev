@@ -62,6 +62,7 @@ function createChristian(id, topInVh, upsideDown) {
   }
 
   document.body.appendChild(christian);
+  return christian;
 }
 
 // ---------------------------------------------------------------------------
@@ -70,23 +71,16 @@ function createChristian(id, topInVh, upsideDown) {
 
 /**
  * Spawns a new pair of Christians at a random height.
+ * Moves the current pair of Christians to the left until they leave the
+ * screen, then removes them and starts over with a new pair.
  */
-function spawnChristianPipes() {
+async function spawnChristianPipes() {
   const bottomInVh =
     Math.floor(Math.random() * (CHRISTIAN_LOWEST - CHRISTIAN_HIGHEST + 1)) +
     CHRISTIAN_HIGHEST;
 
-  createChristian(CHRISTIAN_TOP_ID, bottomInVh - CHRISTIAN_GAP, true);
-  createChristian(CHRISTIAN_BOTTOM_ID, bottomInVh, false);
-}
-
-/**
- * Moves the current pair of Christians to the left until they leave the
- * screen, then removes them and starts over with a new pair.
- */
-async function moveChristianPipes() {
-  const christianTop = document.getElementById(CHRISTIAN_TOP_ID);
-  const christianBottom = document.getElementById(CHRISTIAN_BOTTOM_ID);
+  const christianTop = createChristian(CHRISTIAN_TOP_ID, bottomInVh - CHRISTIAN_GAP, true);
+  const christianBottom = createChristian(CHRISTIAN_BOTTOM_ID, bottomInVh, false);
 
   while (christianBottom.offsetLeft + christianBottom.clientWidth > 0) {
     await sleep(CHRISTIAN_DELAY);
@@ -97,9 +91,7 @@ async function moveChristianPipes() {
 
   christianBottom.remove();
   christianTop.remove();
-
   spawnChristianPipes();
-  moveChristianPipes();
 }
 
 /**
@@ -137,6 +129,5 @@ document.addEventListener("keyup", (event) => {
 
 document.addEventListener("DOMContentLoaded", () => {
   spawnChristianPipes();
-  moveChristianPipes();
   dropBird();
 });
