@@ -14,11 +14,20 @@ async function moveChristianPipe() {
 moveChristianPipe();
 */
 
+/**
+ * Slleps for a given amount of milisecs.
+ *
+ * @param   ms  The amount of milisecs to sleep.
+ */
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 function spawnChristiansPipes() {
   const LowestChristian = 80;
   const HighestChristian = 45;
 
-  const DoubleChristHight =
+  const DoubleChristHeight =
     Math.floor(Math.random() * (LowestChristian - HighestChristian + 1)) +
     HighestChristian;
 
@@ -26,7 +35,7 @@ function spawnChristiansPipes() {
   ChristianTop.src = "./../GameAssests/FlappyBird/christi.png";
   ChristianTop.style.position = "absolute";
   ChristianTop.style.left = "75vw";
-  ChristianTop.style.top = DoubleChristHight - 75 + "vh";
+  ChristianTop.style.top = DoubleChristHeight - 75 + "vh";
   ChristianTop.id = "ChristianTopPipe";
   ChristianTop.style.rotate = "180deg";
   ChristianTop.style.transform = "scaleX(-1)";
@@ -36,13 +45,27 @@ function spawnChristiansPipes() {
   ChristianBot.src = "./../GameAssests/FlappyBird/christi.png";
   ChristianBot.style.position = "absolute";
   ChristianBot.style.left = "75vw";
-  ChristianBot.style.top = DoubleChristHight + "vh";
+  ChristianBot.style.top = DoubleChristHeight + "vh";
   ChristianBot.id = "ChristianBottomPipe";
   let ChristianBotElement = document.body.appendChild(ChristianBot);
+}
 
-
+async function moveChristianPipes() {
+  const ChristianTop = document.getElementById("ChristianTopPipe");
+  const ChristianBot = document.getElementById("ChristianBottomPipe");
+  while (ChristianBot.offsetLeft + ChristianBot.clientWidth > 0) {
+    await sleep(10);
+    ChristianTop.style.left = ChristianTop.offsetLeft - 2 + "px";
+    ChristianBot.style.left = ChristianBot.offsetLeft - 2 + "px";
+  }
+  ChristianBot.remove();
+  ChristianTop.remove();
 }
 
 document.addEventListener("DOMContentLoaded", function () {
   spawnChristiansPipes();
+});
+
+document.addEventListener("keydown", function (event) {
+  moveChristianPipes();
 });
