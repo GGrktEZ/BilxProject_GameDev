@@ -25,6 +25,10 @@ const BIRD_SPAWN_LEFT = "5vw"; // position of bird
 /** True for as long as the player holds the space bar down. */
 let isSpacePressed = false;
 
+/** The current score for the game. Based on Time Survived */
+let gameScore = 0;
+
+
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
@@ -110,6 +114,14 @@ async function dropBird() {
     } else {
       bird.style.top = bird.offsetTop + BIRD_FALL_STEP + "px";
     }
+  }
+}
+
+async function updateScore() {
+  while (true) {
+    await sleep(1000);
+    gameScore++;
+    console.log("Score: " + gameScore);
   }
 }
 
