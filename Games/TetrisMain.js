@@ -29,3 +29,6 @@ const context = canvas.getContext("2d");
 
 canvas.width = CELL_SIZE * COLS;
 canvas.height = CELL_SIZE * ROWS;
+
+context.strokeStyle = "#5f5f5f";
+drawGrid(context);

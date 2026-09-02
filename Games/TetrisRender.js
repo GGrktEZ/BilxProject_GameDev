@@ -23,7 +23,7 @@
 // small, that is fast enough - do not try to be clever here.
 // ---------------------------------------------------------------------------
 
-const CELL_SIZE = 10;
+const CELL_SIZE = 25;
 const BACKGROUND_COLOR = "#4f4f4f";
 
 function drawBlock(context, col, row, colorIndex) {
@@ -45,6 +45,21 @@ function drawGrid(context) {
         CELL_SIZE,
         CELL_SIZE,
       );
+    }
+  }
+}
+function drawPiece(context, piece) {
+  const shape = getShape(piece);
+
+  for (let row = 0; row < shape.length; row++) {
+    for (let col = 0; col < shape[row].length; col++) {
+      if (shape[row][col] === 0) {
+        continue;
+      }
+
+      if (piece.y + row >= 0) {
+        drawBlock(context, piece.x + col, piece.y + row, piece.type);
+      }
     }
   }
 }
