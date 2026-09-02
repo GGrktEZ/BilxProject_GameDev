@@ -97,7 +97,8 @@ async function moveChristianPipes() {
     
     christianTop.style.left = christianTop.offsetLeft - CHRISTIAN_STEP + "px";
     christianBottom.style.left =
-      christianBottom.offsetLeft - CHRISTIAN_STEP + "px";
+    christianBottom.offsetLeft - CHRISTIAN_STEP + "px";
+     
   }
 
   if (gameOver) return; // Don't spawn new pipes if game is over
@@ -122,12 +123,15 @@ async function dropBird() {
       bird.style.top = bird.offsetTop - BIRD_FLAP_STEP + "px";
     } else {
       bird.style.top = bird.offsetTop + BIRD_FALL_STEP + "px";
+      
     }
 
     // Check collision with Christians
     if (birdChristian(bird)) {
       endGame();
     }
+
+     
   }
 
   // Game over if bird hits the bottom
@@ -151,7 +155,7 @@ document.addEventListener("keyup", (event) => {
   }
 });
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => { 
   spawnChristianPipes();
   moveChristianPipes();
   dropBird();
@@ -164,6 +168,7 @@ function birdChristian(bird) {
   const christianBottom = document.getElementById(CHRISTIAN_BOTTOM_ID);
 
   if (!christianTop || !christianBottom) return false;
+  
 
   const birdRect = bird.getBoundingClientRect();
   const topRect = christianTop.getBoundingClientRect();
@@ -184,10 +189,9 @@ function birdChristian(bird) {
     birdRect.bottom < bottomRect.top || 
     birdRect.top > bottomRect.bottom
   );
-
   return collidesTop || collidesBottom;
 }
 function endGame() {
   gameOver = true;
-  alert("Game Over! You hit a Christian!");
-}
+  alert("Game Over! You hit a Christian! : " );
+}   
