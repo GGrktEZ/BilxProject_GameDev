@@ -182,7 +182,7 @@ function birdChristian(bird) {
  */
 function endGame() {
   gameOver = true;
-  alert("Game Over! You hit a Christian! : " );
+  alert("Game Over! You hit a Christian! :Score = " + gameScore);
 }   
 
 
@@ -190,7 +190,6 @@ async function updateScore() {
   while (true) {
     await sleep(1000);
     gameScore++;
-    console.log("Score: " + gameScore);
   }
 }
 
@@ -215,6 +214,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   dropBird();
-});
+});   
 
 
