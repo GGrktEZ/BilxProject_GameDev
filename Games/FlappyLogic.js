@@ -11,12 +11,12 @@ const CHRISTIAN_LOWEST = 80; // lowest the bottom Christian can sit, in vh
 const CHRISTIAN_HIGHEST = 45; // highest the bottom Christian can sit, in vh
 const CHRISTIAN_GAP = 75; // how far above the bottom one the top one hangs
 const CHRISTIAN_STEP = 2; // pixels a Christian moves left per step
-const CHRISTIAN_DELAY = 10; // milliseconds between two steps
+const CHRISTIAN_DELAY = 8; // milliseconds between two steps
 
-const BIRD_FALL_STEP = 6; // pixels the bird falls per step
-const BIRD_FLAP_STEP = 6; // pixels the bird rises per step while flapping
 const BIRD_DELAY = 20; // milliseconds between two steps
 const BIRD_SPAWN_LEFT = "5vw"; // position of bird
+
+let BIRD_VELOCITY = -8; // current velocity of the bird
 
 // ---------------------------------------------------------------------------
 // State
@@ -24,7 +24,6 @@ const BIRD_SPAWN_LEFT = "5vw"; // position of bird
 
 /** True for as long as the player holds the space bar down. */
 let isSpacePressed = false;
-
 /** True when the game is over. */
 let gameOver = false;
 /** The current score for the game. Based on Time Survived */
@@ -88,22 +87,27 @@ async function spawnChristianPipes(id, offset) {
     CHRISTIAN_HIGHEST;
 
   const christianTop = createChristian(
-    id,
+    id + "_top",
     bottomInVh - CHRISTIAN_GAP,
     true,
     offset,
   );
-  const christianBottom = createChristian(id, bottomInVh, false, offset);
+  const christianBottom = createChristian(
+    id + "_bottom",
+    bottomInVh,
+    false,
+    offset,
+  );
 
   while (christianBottom.offsetLeft + christianBottom.clientWidth > 0) {
     await sleep(CHRISTIAN_DELAY);
-    
+
     if (gameOver) return; // Stop moving if game is over
-    
+
     christianTop.style.left = christianTop.offsetLeft - CHRISTIAN_STEP + "px";
     christianBottom.style.left =
-    christianBottom.offsetLeft - CHRISTIAN_STEP + "px";
-     
+      christianBottom.offsetLeft - CHRISTIAN_STEP + "px";
+
   }
 
   if (gameOver) return; // Don't spawn new pipes if game is over
@@ -123,18 +127,15 @@ async function dropBird() {
     await sleep(BIRD_DELAY);
 
     if (isSpacePressed) {
-      bird.style.top = bird.offsetTop - BIRD_FLAP_STEP + "px";
-    } else {
-      bird.style.top = bird.offsetTop + BIRD_FALL_STEP + "px";
-      
+      BIRD_VELOCITY = -8.5; // Bird rises when space is pressed
     }
+    bird.style.top = bird.offsetTop + BIRD_VELOCITY + "px"
+    BIRD_VELOCITY = BIRD_VELOCITY + 0.5; // Gravity effect
 
     // Check collision with Christians
     if (birdChristian(bird)) {
       endGame();
     }
-
-     
   }
 
   // Game over if bird hits the bottom
@@ -150,32 +151,34 @@ async function dropBird() {
  * @returns {boolean} True if the bird collides with a Christian pipe, false otherwise.
  */
 function birdChristian(bird) {
-  const christianTop = document.getElementById(CHRISTIAN_TOP_ID);
-  const christianBottom = document.getElementById(CHRISTIAN_BOTTOM_ID);
+  for (let i = 0; i < 51; i++) {
+    const christianTop = document.getElementById("christi" + (i + 1) + "_top");
+    const christianBottom = document.getElementById("christi" + (i + 1) + "_bottom");
 
-  if (!christianTop || !christianBottom) return false;
-  
+    if (!christianTop || !christianBottom) return false;
 
-  const birdRect = bird.getBoundingClientRect();
-  const topRect = christianTop.getBoundingClientRect();
-  const bottomRect = christianBottom.getBoundingClientRect();
 
-  // Check collision with top Christian
-  const collidesTop = !(
-    birdRect.right < topRect.left || 
-    birdRect.left > topRect.right || 
-    birdRect.bottom < topRect.top || 
-    birdRect.top > topRect.bottom
-  );
+    const birdRect = bird.getBoundingClientRect();
+    const topRect = christianTop.getBoundingClientRect();
+    const bottomRect = christianBottom.getBoundingClientRect();
 
-  // Check collision with bottom Christian
-  const collidesBottom = !(
-    birdRect.right < bottomRect.left || 
-    birdRect.left > bottomRect.right || 
-    birdRect.bottom < bottomRect.top || 
-    birdRect.top > bottomRect.bottom
-  );
-  return collidesTop || collidesBottom;
+    // Check collision with top Christian
+    const collidesTop = !(
+      birdRect.right < topRect.left ||
+      birdRect.left > topRect.right ||
+      birdRect.bottom < topRect.top ||
+      birdRect.top > topRect.bottom
+    );
+
+    // Check collision with bottom Christian
+    const collidesBottom = !(
+      birdRect.right < bottomRect.left ||
+      birdRect.left > bottomRect.right ||
+      birdRect.bottom < bottomRect.top ||
+      birdRect.top > bottomRect.bottom
+    );
+    return collidesTop || collidesBottom;
+  }
 }
 /**
  * Ends the game and displays a game over message.
@@ -183,13 +186,15 @@ function birdChristian(bird) {
 function endGame() {
   gameOver = true;
   alert("Game Over! You hit a Christian! :Score = " + gameScore);
-}   
+}
 
 
 async function updateScore() {
+  const scoreElement = document.getElementById("score");
   while (true) {
     await sleep(1000);
     gameScore++;
+    scoreElement.textContent = "Your Score is: " + gameScore;
   }
 }
 
@@ -212,8 +217,8 @@ document.addEventListener("DOMContentLoaded", () => {
   for (let i = 0; i < 51; i++) {
     spawnChristianPipes("christi" + (i + 1), i * 50);
   }
-
   dropBird();
-});   
+  updateScore();
+});
 
 
