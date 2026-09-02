@@ -6,7 +6,7 @@
 // the game easier or harder.
 // ---------------------------------------------------------------------------
 const CHRISTIAN_IMAGE = "./../GameAssests/FlappyBird/christi.png";
-const CHRISTIAN_SPAWN_LEFT = "100vw"; // where a new pair appears
+const CHRISTIAN_SPAWN_LEFT = 100; // where a new pair appears
 const CHRISTIAN_LOWEST = 80; // lowest the bottom Christian can sit, in vh
 const CHRISTIAN_HIGHEST = 45; // highest the bottom Christian can sit, in vh
 const CHRISTIAN_GAP = 75; // how far above the bottom one the top one hangs
@@ -50,7 +50,7 @@ function createChristian(id, topInVh, upsideDown, offset) {
   christian.id = id;
   christian.src = CHRISTIAN_IMAGE;
   christian.style.position = "absolute";
-  christian.style.left = CHRISTIAN_SPAWN_LEFT + offset;
+  christian.style.left = CHRISTIAN_SPAWN_LEFT + offset + "vw";
   christian.style.top = topInVh + "vh";
 
   if (upsideDown) {
@@ -93,7 +93,6 @@ async function spawnChristianPipes(id, offset) {
 
   christianBottom.remove();
   christianTop.remove();
-  spawnChristianPipes();
 }
 
 /**
@@ -130,7 +129,9 @@ document.addEventListener("keyup", (event) => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  spawnChristianPipes("christi1", "0vw");
-  spawnChristianPipes("christi2", "50vw");
+  for (let i = 0; i < 51; i++) {
+    spawnChristianPipes("christi" + (i + 1), i * 50);
+  }
+
   dropBird();
 });
