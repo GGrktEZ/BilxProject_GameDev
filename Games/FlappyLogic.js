@@ -6,7 +6,7 @@
 // the game easier or harder.
 // ---------------------------------------------------------------------------
 const CHRISTIAN_IMAGE = "./../GameAssests/FlappyBird/christi.png";
-const CHRISTIAN_SPAWN_LEFT = "75vw"; // where a new pair appears
+const CHRISTIAN_SPAWN_LEFT = 100; // where a new pair appears
 const CHRISTIAN_LOWEST = 80; // lowest the bottom Christian can sit, in vh
 const CHRISTIAN_HIGHEST = 45; // highest the bottom Christian can sit, in vh
 const CHRISTIAN_GAP = 75; // how far above the bottom one the top one hangs
@@ -16,9 +16,7 @@ const CHRISTIAN_DELAY = 10; // milliseconds between two steps
 const BIRD_FALL_STEP = 6; // pixels the bird falls per step
 const BIRD_FLAP_STEP = 6; // pixels the bird rises per step while flapping
 const BIRD_DELAY = 20; // milliseconds between two steps
-
-const CHRISTIAN_TOP_ID = "ChristianTopPipe";
-const CHRISTIAN_BOTTOM_ID = "ChristianBottomPipe";
+const BIRD_SPAWN_LEFT = "5vw"; // position of bird
 
 // ---------------------------------------------------------------------------
 // State
@@ -29,6 +27,9 @@ let isSpacePressed = false;
 
 /** True when the game is over. */
 let gameOver = false;
+/** The current score for the game. Based on Time Survived */
+let gameScore = 0;
+
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -50,12 +51,12 @@ function sleep(ms) {
  * @param   topInVh     Distance from the top of the screen, in vh.
  * @param   upsideDown  True for the Christian hanging from the ceiling.
  */
-function createChristian(id, topInVh, upsideDown) {
+function createChristian(id, topInVh, upsideDown, offset) {
   const christian = document.createElement("img");
   christian.id = id;
   christian.src = CHRISTIAN_IMAGE;
   christian.style.position = "absolute";
-  christian.style.left = CHRISTIAN_SPAWN_LEFT;
+  christian.style.left = CHRISTIAN_SPAWN_LEFT + offset + "vw";
   christian.style.top = topInVh + "vh";
 
   if (upsideDown) {
@@ -64,6 +65,7 @@ function createChristian(id, topInVh, upsideDown) {
   }
 
   document.body.appendChild(christian);
+  return christian;
 }
 
 // ---------------------------------------------------------------------------
@@ -72,23 +74,21 @@ function createChristian(id, topInVh, upsideDown) {
 
 /**
  * Spawns a new pair of Christians at a random height.
+ * Moves the current pair of Christians to the left until they leave the
+ * screen, then removes them and starts over with a new pair.
  */
-function spawnChristianPipes() {
+async function spawnChristianPipes(id, offset) {
   const bottomInVh =
     Math.floor(Math.random() * (CHRISTIAN_LOWEST - CHRISTIAN_HIGHEST + 1)) +
     CHRISTIAN_HIGHEST;
 
-  createChristian(CHRISTIAN_TOP_ID, bottomInVh - CHRISTIAN_GAP, true);
-  createChristian(CHRISTIAN_BOTTOM_ID, bottomInVh, false);
-}
-
-/**
- * Moves the current pair of Christians to the left until they leave the
- * screen, then removes them and starts over with a new pair.
- */
-async function moveChristianPipes() {
-  const christianTop = document.getElementById(CHRISTIAN_TOP_ID);
-  const christianBottom = document.getElementById(CHRISTIAN_BOTTOM_ID);
+  const christianTop = createChristian(
+    id,
+    bottomInVh - CHRISTIAN_GAP,
+    true,
+    offset,
+  );
+  const christianBottom = createChristian(id, bottomInVh, false, offset);
 
   while (christianBottom.offsetLeft + christianBottom.clientWidth > 0) {
     await sleep(CHRISTIAN_DELAY);
@@ -105,9 +105,6 @@ async function moveChristianPipes() {
 
   christianBottom.remove();
   christianTop.remove();
-
-  spawnChristianPipes();
-  moveChristianPipes();
 }
 
 /**
@@ -115,6 +112,7 @@ async function moveChristianPipes() {
  */
 async function dropBird() {
   const bird = document.getElementById("bird_img");
+  bird.style.left = BIRD_SPAWN_LEFT;
 
   while (bird.offsetTop + bird.clientHeight < window.innerHeight && !gameOver) {
     await sleep(BIRD_DELAY);
@@ -140,6 +138,14 @@ async function dropBird() {
   }
 }
 
+async function updateScore() {
+  while (true) {
+    await sleep(1000);
+    gameScore++;
+    console.log("Score: " + gameScore);
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Events - this is where the game starts.
 // ---------------------------------------------------------------------------
@@ -155,9 +161,11 @@ document.addEventListener("keyup", (event) => {
   }
 });
 
-document.addEventListener("DOMContentLoaded", () => { 
-  spawnChristianPipes();
-  moveChristianPipes();
+document.addEventListener("DOMContentLoaded", () => {
+  for (let i = 0; i < 51; i++) {
+    spawnChristianPipes("christi" + (i + 1), i * 50);
+  }
+
   dropBird();
 });
 
