@@ -32,3 +32,5 @@ canvas.height = CELL_SIZE * ROWS;
 
 context.strokeStyle = "#5f5f5f";
 drawGrid(context);
+
+drawPiece(context, [1, 1]);
