@@ -1,0 +1,12 @@
+/* ---------------------------------------------------------------------------
+ * Tetris - the look of the page around the game.
+ *
+ * What goes in here:
+ *   body                 background color, text color, font
+ *   .tetris_container    puts the canvas and the sidebar next to each other
+ *   #tetris_canvas       a border around the board
+ *   .tetris_sidebar      score, lines, level and the key list
+ *
+ * The blocks themselves are NOT styled here. They are painted onto the canvas,
+ * their colors live in TetrisPieces.js and TetrisRender.js.
+ * --------------------------------------------------------------------------- */

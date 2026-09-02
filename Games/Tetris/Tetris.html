@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tetris</title>
+    <link rel="stylesheet" href="./../../css/tetris.css" />
+  </head>
+
+  <body>
+    <h1>Tetris</h1>
+
+    <div class="tetris_container">
+      <!-- The board is drawn in here. TetrisMain.js looks for this id and
+           sets the width and the height itself, so we do not write them. -->
+      <canvas id="tetris_canvas"></canvas>
+
+      <div class="tetris_sidebar">
+        <!-- drawScoreboard() in TetrisRender.js writes the numbers into
+             these three spans, so the ids have to stay as they are. -->
+        <p>Score: <span id="score">0</span></p>
+        <p>Lines: <span id="lines">0</span></p>
+        <p>Level: <span id="level">1</span></p>
+
+        <!-- The key list for the player goes here. -->
+      </div>
+    </div>
+
+    <!-- The order matters. Every file uses things from the files above it:
+         pieces (data) -> state (data) -> rules -> drawing -> start. -->
+    <script src="./TetrisPieces.js"></script>
+    <script src="./TetrisState.js"></script>
+    <script src="./TetrisRules.js"></script>
+    <script src="./TetrisRender.js"></script>
+    <script src="./TetrisMain.js"></script>
+  </body>
+</html>
