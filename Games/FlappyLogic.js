@@ -50,6 +50,7 @@ function sleep(ms) {
  * @param   id          The id the image gets, so we can find it again.
  * @param   topInVh     Distance from the top of the screen, in vh.
  * @param   upsideDown  True for the Christian hanging from the ceiling.
+ * @param   offset      How far to the right of the spawn point the Christian
  */
 function createChristian(id, topInVh, upsideDown, offset) {
   const christian = document.createElement("img");
@@ -76,6 +77,10 @@ function createChristian(id, topInVh, upsideDown, offset) {
  * Spawns a new pair of Christians at a random height.
  * Moves the current pair of Christians to the left until they leave the
  * screen, then removes them and starts over with a new pair.
+ * 
+ * @param   id      The id of the Christian pair, so we can find them again.
+ * @param   offset  How far to the right of the spawn point the Christian pair
+ *                  should appear. 
  */
 async function spawnChristianPipes(id, offset) {
   const bottomInVh =
@@ -138,6 +143,49 @@ async function dropBird() {
   }
 }
 
+
+/**
+ * Checks if the bird collides with either Christian pipe.
+ * @param   bird    The bird element.
+ * @returns {boolean} True if the bird collides with a Christian pipe, false otherwise.
+ */
+function birdChristian(bird) {
+  const christianTop = document.getElementById(CHRISTIAN_TOP_ID);
+  const christianBottom = document.getElementById(CHRISTIAN_BOTTOM_ID);
+
+  if (!christianTop || !christianBottom) return false;
+  
+
+  const birdRect = bird.getBoundingClientRect();
+  const topRect = christianTop.getBoundingClientRect();
+  const bottomRect = christianBottom.getBoundingClientRect();
+
+  // Check collision with top Christian
+  const collidesTop = !(
+    birdRect.right < topRect.left || 
+    birdRect.left > topRect.right || 
+    birdRect.bottom < topRect.top || 
+    birdRect.top > topRect.bottom
+  );
+
+  // Check collision with bottom Christian
+  const collidesBottom = !(
+    birdRect.right < bottomRect.left || 
+    birdRect.left > bottomRect.right || 
+    birdRect.bottom < bottomRect.top || 
+    birdRect.top > bottomRect.bottom
+  );
+  return collidesTop || collidesBottom;
+}
+/**
+ * Ends the game and displays a game over message.
+ */
+function endGame() {
+  gameOver = true;
+  alert("Game Over! You hit a Christian! : " );
+}   
+
+
 async function updateScore() {
   while (true) {
     await sleep(1000);
@@ -170,36 +218,3 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-// Checks if the bird collides with either Christian pipe.
-function birdChristian(bird) {
-  const christianTop = document.getElementById(CHRISTIAN_TOP_ID);
-  const christianBottom = document.getElementById(CHRISTIAN_BOTTOM_ID);
-
-  if (!christianTop || !christianBottom) return false;
-  
-
-  const birdRect = bird.getBoundingClientRect();
-  const topRect = christianTop.getBoundingClientRect();
-  const bottomRect = christianBottom.getBoundingClientRect();
-
-  // Check collision with top Christian
-  const collidesTop = !(
-    birdRect.right < topRect.left || 
-    birdRect.left > topRect.right || 
-    birdRect.bottom < topRect.top || 
-    birdRect.top > topRect.bottom
-  );
-
-  // Check collision with bottom Christian
-  const collidesBottom = !(
-    birdRect.right < bottomRect.left || 
-    birdRect.left > bottomRect.right || 
-    birdRect.bottom < bottomRect.top || 
-    birdRect.top > bottomRect.bottom
-  );
-  return collidesTop || collidesBottom;
-}
-function endGame() {
-  gameOver = true;
-  alert("Game Over! You hit a Christian! : " );
-}   
