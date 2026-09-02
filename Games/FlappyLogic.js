@@ -18,9 +18,6 @@ const BIRD_FLAP_STEP = 6; // pixels the bird rises per step while flapping
 const BIRD_DELAY = 20; // milliseconds between two steps
 const BIRD_SPAWN_LEFT = "5vw"; // position of bird
 
-const CHRISTIAN_TOP_ID = "ChristianTopPipe";
-const CHRISTIAN_BOTTOM_ID = "ChristianBottomPipe";
-
 // ---------------------------------------------------------------------------
 // State
 // ---------------------------------------------------------------------------
@@ -48,12 +45,12 @@ function sleep(ms) {
  * @param   topInVh     Distance from the top of the screen, in vh.
  * @param   upsideDown  True for the Christian hanging from the ceiling.
  */
-function createChristian(id, topInVh, upsideDown) {
+function createChristian(id, topInVh, upsideDown, offset) {
   const christian = document.createElement("img");
   christian.id = id;
   christian.src = CHRISTIAN_IMAGE;
   christian.style.position = "absolute";
-  christian.style.left = CHRISTIAN_SPAWN_LEFT;
+  christian.style.left = CHRISTIAN_SPAWN_LEFT + offset;
   christian.style.top = topInVh + "vh";
 
   if (upsideDown) {
@@ -74,13 +71,18 @@ function createChristian(id, topInVh, upsideDown) {
  * Moves the current pair of Christians to the left until they leave the
  * screen, then removes them and starts over with a new pair.
  */
-async function spawnChristianPipes() {
+async function spawnChristianPipes(id, offset) {
   const bottomInVh =
     Math.floor(Math.random() * (CHRISTIAN_LOWEST - CHRISTIAN_HIGHEST + 1)) +
     CHRISTIAN_HIGHEST;
 
-  const christianTop = createChristian(CHRISTIAN_TOP_ID, bottomInVh - CHRISTIAN_GAP, true);
-  const christianBottom = createChristian(CHRISTIAN_BOTTOM_ID, bottomInVh, false);
+  const christianTop = createChristian(
+    id,
+    bottomInVh - CHRISTIAN_GAP,
+    true,
+    offset,
+  );
+  const christianBottom = createChristian(id, bottomInVh, false, offset);
 
   while (christianBottom.offsetLeft + christianBottom.clientWidth > 0) {
     await sleep(CHRISTIAN_DELAY);
@@ -128,6 +130,7 @@ document.addEventListener("keyup", (event) => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  spawnChristianPipes();
+  spawnChristianPipes("christi1", "0vw");
+  spawnChristianPipes("christi2", "50vw");
   dropBird();
 });
