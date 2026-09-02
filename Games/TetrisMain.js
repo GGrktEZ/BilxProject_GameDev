@@ -23,3 +23,9 @@
 // every computer. Do not use setInterval for the falling, and do not count
 // frames.
 // ---------------------------------------------------------------------------
+
+const canvas = document.getElementById("tetris_canvas");
+const context = canvas.getContext("2d");
+
+canvas.width = CELL_SIZE * COLS;
+canvas.height = CELL_SIZE * ROWS;

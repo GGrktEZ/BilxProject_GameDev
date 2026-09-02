@@ -29,3 +29,6 @@
 // Cells above the top row are ignored when checking, so a new piece may start
 // half above the board.
 // ---------------------------------------------------------------------------
+
+const ROWS = 25;
+const COLS = 10;

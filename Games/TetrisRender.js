@@ -36,3 +36,15 @@ function drawBlock(context, col, row, colorIndex) {
   context.strokeStyle = BACKGROUND_COLOR;
   context.strokeRect(x, y, CELL_SIZE, CELL_SIZE);
 }
+function drawGrid(context) {
+  for (let row = 0; row < ROWS; row++) {
+    for (let col = 0; col < COLS; col++) {
+      context.strokeRect(
+        col * CELL_SIZE,
+        row * CELL_SIZE,
+        CELL_SIZE,
+        CELL_SIZE,
+      );
+    }
+  }
+}
