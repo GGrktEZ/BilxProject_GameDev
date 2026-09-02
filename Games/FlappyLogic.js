@@ -25,6 +25,8 @@ const BIRD_SPAWN_LEFT = "5vw"; // position of bird
 /** True for as long as the player holds the space bar down. */
 let isSpacePressed = false;
 
+/** True when the game is over. */
+let gameOver = false;
 /** The current score for the game. Based on Time Survived */
 let gameScore = 0;
 
@@ -90,10 +92,16 @@ async function spawnChristianPipes(id, offset) {
 
   while (christianBottom.offsetLeft + christianBottom.clientWidth > 0) {
     await sleep(CHRISTIAN_DELAY);
+    
+    if (gameOver) return; // Stop moving if game is over
+    
     christianTop.style.left = christianTop.offsetLeft - CHRISTIAN_STEP + "px";
     christianBottom.style.left =
-      christianBottom.offsetLeft - CHRISTIAN_STEP + "px";
+    christianBottom.offsetLeft - CHRISTIAN_STEP + "px";
+     
   }
+
+  if (gameOver) return; // Don't spawn new pipes if game is over
 
   christianBottom.remove();
   christianTop.remove();
@@ -106,14 +114,27 @@ async function dropBird() {
   const bird = document.getElementById("bird_img");
   bird.style.left = BIRD_SPAWN_LEFT;
 
-  while (bird.offsetTop + bird.clientHeight < window.innerHeight) {
+  while (bird.offsetTop + bird.clientHeight < window.innerHeight && !gameOver) {
     await sleep(BIRD_DELAY);
 
     if (isSpacePressed) {
       bird.style.top = bird.offsetTop - BIRD_FLAP_STEP + "px";
     } else {
       bird.style.top = bird.offsetTop + BIRD_FALL_STEP + "px";
+      
     }
+
+    // Check collision with Christians
+    if (birdChristian(bird)) {
+      endGame();
+    }
+
+     
+  }
+
+  // Game over if bird hits the bottom
+  if (!gameOver) {
+    endGame();
   }
 }
 
@@ -147,3 +168,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
   dropBird();
 });
+
+
+// Checks if the bird collides with either Christian pipe.
+function birdChristian(bird) {
+  const christianTop = document.getElementById(CHRISTIAN_TOP_ID);
+  const christianBottom = document.getElementById(CHRISTIAN_BOTTOM_ID);
+
+  if (!christianTop || !christianBottom) return false;
+  
+
+  const birdRect = bird.getBoundingClientRect();
+  const topRect = christianTop.getBoundingClientRect();
+  const bottomRect = christianBottom.getBoundingClientRect();
+
+  // Check collision with top Christian
+  const collidesTop = !(
+    birdRect.right < topRect.left || 
+    birdRect.left > topRect.right || 
+    birdRect.bottom < topRect.top || 
+    birdRect.top > topRect.bottom
+  );
+
+  // Check collision with bottom Christian
+  const collidesBottom = !(
+    birdRect.right < bottomRect.left || 
+    birdRect.left > bottomRect.right || 
+    birdRect.bottom < bottomRect.top || 
+    birdRect.top > bottomRect.bottom
+  );
+  return collidesTop || collidesBottom;
+}
+function endGame() {
+  gameOver = true;
+  alert("Game Over! You hit a Christian! : " );
+}   
