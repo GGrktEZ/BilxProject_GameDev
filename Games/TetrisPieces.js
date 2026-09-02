@@ -24,9 +24,16 @@ const PIECE_Z = 5;
 const PIECE_J = 6;
 const PIECE_L = 7;
 
-
 /** All piece types, so we can pick a random one. */
-const PIECE_TYPES = [PIECE_I, PIECE_O, PIECE_T, PIECE_S, PIECE_Z, PIECE_J, PIECE_L];
+const PIECE_TYPES = [
+  PIECE_I,
+  PIECE_O,
+  PIECE_T,
+  PIECE_S,
+  PIECE_Z,
+  PIECE_J,
+  PIECE_L,
+];
 
 /** One color per piece type. Index 0 is never drawn, it stands for "empty". */
 const PIECE_COLORS = [

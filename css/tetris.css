@@ -10,3 +10,21 @@
  * The blocks themselves are NOT styled here. They are painted onto the canvas,
  * their colors live in TetrisPieces.js and TetrisRender.js.
  * --------------------------------------------------------------------------- */
+
+body {
+  background-color: black;
+  color: white;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  text-align: center;
+}
+
+.tetris_container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 30px;
+}
+
+.tetris_sidebar {
+  text-align: left;
+}

@@ -22,3 +22,17 @@
 // The whole canvas is painted again from scratch every frame. The board is
 // small, that is fast enough - do not try to be clever here.
 // ---------------------------------------------------------------------------
+
+const CELL_SIZE = 10;
+const BACKGROUND_COLOR = "#4f4f4f";
+
+function drawBlock(context, col, row, colorIndex) {
+  const x = col * CELL_SIZE;
+  const y = row * CELL_SIZE;
+
+  context.fillStyle = PIECE_COLORS[colorIndex];
+  context.fillRect(x, y, CELL_SIZE, CELL_SIZE);
+
+  context.strokeStyle = BACKGROUND_COLOR;
+  context.strokeRect(x, y, CELL_SIZE, CELL_SIZE);
+}

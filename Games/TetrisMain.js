@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------------
-// Tetris - start, keyboard and the game loop. This file glues the rest
-// together: the keyboard changes the state, the loop lets the piece fall and
+// Tetris - start, keyboard and the game loop.
+// This file glues the rest together: the keyboard changes the state, the loop lets the piece fall and
 // asks the drawing to paint the new picture.
 //
 // What goes in here:
