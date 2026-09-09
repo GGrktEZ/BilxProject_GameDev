@@ -33,9 +33,52 @@
 const ROWS = 20;
 const COLS = 10;
 
+const START_DROP_INTERVAL = 1000;
+
 // ---------------------------------------------------------------------------
 // Help us
 // ---------------------------------------------------------------------------
 function getShape(piece) {
   return (PIECES[piece.type] [piece.rotation]);
 }
+const state = {
+  board : [],
+  piece : null,
+  ponits : 0,
+  highscore : 0, 
+  lvl : 0,
+  dropInterval : START_DROP_INTERVAL,
+}
+function createEmptyBoard () {
+  const board = [];
+  for (let row = 0; row < ROWS; row++) {
+     board.push(new Array (COLS).fill (0))
+  }
+  return board
+}
+function isValidPosition (shape, board, x, y) {
+  for (let row = 0; row < shape.lengnt; row++) {
+    for (let col = 0; col < shape[row].lengnt; col++) {
+      if (shape[row][col] === 0) {
+        continue
+      }
+
+      const boardX = x+col
+      const boardY = y+row
+      if (boardX >= COLS ||  boardX < 0 || boardY >= ROWS) {
+        return false
+      }
+
+      if (boardY < 0) {
+        continue
+      }
+      
+      if (board[boardX][boardY] !== 0){
+        return false
+      }
+    }
+  }
+  return true
+}
+
+  

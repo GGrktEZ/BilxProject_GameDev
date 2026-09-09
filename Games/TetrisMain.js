@@ -33,3 +33,4 @@ canvas.height = CELL_SIZE * ROWS;
 
 
 drawPiece(context, { type: PIECE_Z, rotation: 0, x: 4, y: 4 });
+
