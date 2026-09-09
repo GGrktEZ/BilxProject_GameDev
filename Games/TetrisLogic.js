@@ -33,7 +33,6 @@
 const ROWS = 20;
 const COLS = 10;
 
-const START_DROP_INTERVAL = 1000;
 
 // ---------------------------------------------------------------------------
 // Help us
@@ -44,10 +43,7 @@ function getShape(piece) {
 const state = {
   board : [],
   piece : null,
-  ponits : 0,
-  highscore : 0, 
-  lvl : 0,
-  dropInterval : START_DROP_INTERVAL,
+  dropInterval : 1000,
   isGameOver: false,
 }
 function createEmptyBoard () {
@@ -110,6 +106,29 @@ function movePiece (stepX) {
    return true
 }
 
+function lockPiece() {
+  const shape = getShape(state.piece);
+
+  for (let row = 0; row < shape.length; row++) {
+    for (let col = 0; col < shape[row].length; col++) {
+      if (shape[row][col] === 0) {
+        continue;
+      }
+
+      const boardY = state.piece.y + row;
+      const boardX = state.piece.x + col;
+
+      // Cells above the top row simply fall off the board.
+      if (boardY >= 0) {
+        state.board[boardY][boardX] = state.piece.type;
+      }
+    }
+  }
+
+  spawnPiece();
+}
+
+
 function dropPieceOneRow () {
      if (state.isGameOver) {
     return false
@@ -117,6 +136,7 @@ function dropPieceOneRow () {
 
   const newY = state.piece.y +1; 
    if (!isValidPosition(state.board, getShape(state.piece),state.piece.x, newY)) {
+    lockPiece();
      return false
    }
    
