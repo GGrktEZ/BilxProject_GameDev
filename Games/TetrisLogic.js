@@ -37,5 +37,5 @@ const COLS = 10;
 // Help us
 // ---------------------------------------------------------------------------
 function getShape(piece) {
-  return (PIECES[piece.type], [piece.rotation]);
+  return (PIECES[piece.type] [piece.rotation]);
 }

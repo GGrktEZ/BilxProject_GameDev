@@ -30,7 +30,6 @@ const context = canvas.getContext("2d");
 canvas.width = CELL_SIZE * COLS;
 canvas.height = CELL_SIZE * ROWS;
 
-context.strokeStyle = "#5f5f5f";
-drawGrid(context);
 
-drawPiece(context, [1, 1]);
+
+drawPiece(context, { type: PIECE_Z, rotation: 0, x: 4, y: 4 });
