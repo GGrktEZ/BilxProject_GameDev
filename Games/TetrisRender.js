@@ -64,23 +64,21 @@ function drawPiece(context, piece) {
   }
 }
 
-
-function drawBoard (context, board ) {
-  for ( let row = 0; row < ROWS; row ++ ) {
-    for (let col = 0; col < COLS; col ++) {
-      if (board[col][row] !== 0 )
-    {
-   drawBlock(context, col, row, board[col][row] );
+function drawBoard(context, board) {
+  for (let row = 0; row < ROWS; row++) {
+    for (let col = 0; col < COLS; col++) {
+      if (board[row][col] !== 0) {
+        drawBlock(context, col, row, board[row][col]);
+      }
     }
   }
- }
 }
 
-function drawGame (context, state) {
-  context.fillStyle = BACKGROUND_COLOR 
-  context.fillRect(0, 0, COLS * CELL_SIZE, ROWS * CELL_SIZE)
-  
-  drawGrid(context)
-  drawBoard(context, state.board)
-  drawBoard(context, state.piece)
+function drawGame(context, state) {
+  context.fillStyle = BACKGROUND_COLOR;
+  context.fillRect(0, 0, COLS * CELL_SIZE, ROWS * CELL_SIZE);
+
+  drawGrid(context);
+  drawBoard(context, state.board);
+  drawPiece(context, state.piece);
 }

@@ -55,8 +55,8 @@ function createEmptyBoard() {
   return board;
 }
 function isValidPosition(board, shape, x, y) {
-  for (let row = 0; row < shape.lengnt; row++) {
-    for (let col = 0; col < shape[row].lengnt; col++) {
+  for (let row = 0; row < shape.length; row++) {
+    for (let col = 0; col < shape[row].length; col++) {
       if (shape[row][col] === 0) {
         continue;
       }
@@ -71,7 +71,7 @@ function isValidPosition(board, shape, x, y) {
         continue;
       }
 
-      if (board[boardX][boardY] !== 0) {
+      if (board[boardY][boardX] !== 0) {
         return false;
       }
     }
@@ -80,7 +80,7 @@ function isValidPosition(board, shape, x, y) {
 }
 
 function spawnPiece() {
-  const type = PIECE_TYPES[Math.floor(Math.random * PIECE_TYPES.length)];
+  const type = PIECE_TYPES[Math.floor(Math.random() * PIECE_TYPES.length)];
 
   state.piece = {
     type: type,
@@ -93,8 +93,8 @@ function spawnPiece() {
     !isValidPosition(
       state.board,
       getShape(state.piece),
-      state.shape.x,
-      state.shape.y,
+      state.piece.x,
+      state.piece.y,
     )
   ) {
     state.isGameOver = true;
@@ -158,7 +158,7 @@ function dropPieceOneRow() {
 }
 
 function hardDrop() {
-  if (isGameOver) {
+  if (state.isGameOver) {
     return false;
   }
   while (dropPieceOneRow()) {}
