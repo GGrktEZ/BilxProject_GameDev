@@ -27,14 +27,60 @@ const CELL_SIZE = 27.5;
 let BACKGROUND_COLOR = "#300435";
 const GRID_COLOR = "#c35cff";
 
+// --- epilepsy mode ---------------------------------------------------------
+// Off until the button on the page switches it on. While it runs, the page
+// background, the canvas background and the blocks each walk around the color
+// wheel at their own speed, so they drift apart instead of staying in step.
+let epilepsyMode = false;
+let bodyHue = 0;
+let canvasHue = 120;
+let blockHue = 240;
+
+const BODY_HUE_SPEED = 0.04; // degrees per millisecond
+const CANVAS_HUE_SPEED = 0.07;
+const BLOCK_HUE_SPEED = 0.11;
+
+function setEpilepsyMode(on) {
+  epilepsyMode = on;
+
+  if (!on) {
+    document.body.style.backgroundColor = "";
+  }
+}
+
+function advanceEpilepsyColors(deltaTime) {
+  if (!epilepsyMode) {
+    return;
+  }
+
+  bodyHue = (bodyHue + deltaTime * BODY_HUE_SPEED) % 360;
+  canvasHue = (canvasHue + deltaTime * CANVAS_HUE_SPEED) % 360;
+  blockHue = (blockHue + deltaTime * BLOCK_HUE_SPEED) % 360;
+
+  document.body.style.backgroundColor = `hsl(${bodyHue}, 100%, 15%)`;
+}
+
+function canvasColor() {
+  return epilepsyMode ? `hsl(${canvasHue}, 100%, 12%)` : BACKGROUND_COLOR;
+}
+
+function blockColor(colorIndex) {
+  if (!epilepsyMode) {
+    return PIECE_COLORS[colorIndex];
+  }
+
+  // 51 degrees apart keeps the seven pieces spread over the wheel as it turns
+  return `hsl(${(blockHue + colorIndex * 51) % 360}, 80%, 65%)`;
+}
+
 function drawBlock(context, col, row, colorIndex) {
   const x = col * CELL_SIZE;
   const y = row * CELL_SIZE;
 
-  context.fillStyle = PIECE_COLORS[colorIndex];
+  context.fillStyle = blockColor(colorIndex);
   context.fillRect(x, y, CELL_SIZE, CELL_SIZE);
 
-  context.strokeStyle = BACKGROUND_COLOR;
+  context.strokeStyle = canvasColor();
   context.strokeRect(x, y, CELL_SIZE, CELL_SIZE);
 }
 function drawGrid(context) {
@@ -78,7 +124,7 @@ function drawBoard(context, board) {
 }
 
 function drawGame(context, state) {
-  context.fillStyle = BACKGROUND_COLOR;
+  context.fillStyle = canvasColor();
   context.fillRect(0, 0, COLS * CELL_SIZE, ROWS * CELL_SIZE);
 
   drawBoard(context, state.board);
@@ -93,16 +139,18 @@ function drawGame(context, state) {
       overlay.id = "tetris-game-over";
       overlay.textContent = "GAME OVER";
       Object.assign(overlay.style, {
-        position: "fixed",
+        position: "absolute",
         inset: "0",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: "rgba(0, 0, 0, 0.7)",
         color: "white",
-        font: "bold 60px sans-serif",
+        font: "bold 40px sans-serif",
       });
-      document.body.appendChild(overlay);
+      // Over the board only. Game 3 has a second game next to it that must
+      // stay visible and playable when the Tetris side is finished.
+      context.canvas.parentElement.appendChild(overlay);
     }
   } else {
     document.getElementById("tetris-game-over")?.remove();

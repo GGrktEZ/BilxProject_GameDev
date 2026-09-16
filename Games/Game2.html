@@ -17,6 +17,14 @@
     </div>
     <h1 id="gameOverH1"></h1>
 
+    <button id="epilepsy_button" type="button" aria-pressed="false">
+      Epilepsy mode: off
+    </button>
+    <p class="epilepsy_warning">
+      Warning: epilepsy mode shifts all colors non-stop and can be unsafe for
+      people with photosensitive epilepsy.
+    </p>
+
     <!-- The order matters. Every file uses things from the files above it:
          pieces (data) -> state (data) -> rules -> drawing -> start. -->
     <script src="./TetrisPieces.js"></script>

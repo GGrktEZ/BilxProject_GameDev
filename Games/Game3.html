@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flappris</title>
+    <link rel="stylesheet" href="./../css/flappy.css" />
+    <link rel="stylesheet" href="./../css/flappris.css" />
+  </head>
+
+  <body>
+    <!-- The Flappy half. The Christians are added to the body by the script,
+         so they fly across the whole page, behind the Tetris panel. -->
+    <h1 id="score">Your Score is:</h1>
+    <img
+      src="./../GameAssests/FlappyBird/bird.png"
+      alt="Image of Flappy Bird"
+      id="bird_img"
+    />
+
+    <!-- The Tetris half, pinned to the right edge and above the birds. -->
+    <aside class="flappris_panel">
+      <h2>Tetris</h2>
+      <div class="tetris_container">
+        <canvas id="tetris_canvas"></canvas>
+      </div>
+      <p class="flappris_keys">
+        Arrows move and turn the piece<br />
+        R gives a new board<br />
+        Space flaps the bird
+      </p>
+    </aside>
+
+    <!-- Tetris first, in the same order as Game 2, then the glue. Game3Main.js
+         takes the place of TetrisMain.js: it leaves the space bar alone.
+         FlappyLogic.js starts its own half when the page is loaded. -->
+    <script src="./TetrisPieces.js"></script>
+    <script src="./TetrisLogic.js"></script>
+    <script src="./TetrisRender.js"></script>
+    <script src="./Game3Main.js"></script>
+    <script src="./FlappyLogic.js"></script>
+  </body>
+</html>

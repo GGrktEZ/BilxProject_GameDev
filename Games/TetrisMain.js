@@ -28,10 +28,22 @@ const canvas = document.getElementById("tetris_canvas");
 const context = canvas.getContext("2d");
 
 let lastFrameTime = 0;
-let backgroundColorValue = 0;
 
 canvas.width = CELL_SIZE * COLS;
 canvas.height = CELL_SIZE * ROWS;
+
+const epilepsyButton = document.getElementById("epilepsy_button");
+
+epilepsyButton.addEventListener("click", () => {
+  setEpilepsyMode(!epilepsyMode);
+  epilepsyButton.setAttribute("aria-pressed", String(epilepsyMode));
+  epilepsyButton.textContent = epilepsyMode
+    ? "Epilepsy mode: on"
+    : "Epilepsy mode: off";
+
+  // the arrow keys and space belong to the game, not to the button
+  epilepsyButton.blur();
+});
 
 document.addEventListener("keydown", (event) => {
   if (event.code === "ArrowLeft") {
@@ -63,12 +75,11 @@ document.addEventListener("keydown", (event) => {
 function gameLoop(currentTime) {
   const deltaTime = currentTime - lastFrameTime;
   lastFrameTime = currentTime;
+
+  advanceEpilepsyColors(deltaTime);
+
   if (!state.isGameOver) {
     state.dropCounter += deltaTime;
-    backgroundColorValue = (backgroundColorValue + 1) % 16777216;
-    document.body.style.backgroundColor = `#${backgroundColorValue
-      .toString(16)
-      .padStart(6, "0")}`;
     if (state.dropCounter > state.dropInterval) {
       dropPieceOneRow();
       state.dropCounter = 0;

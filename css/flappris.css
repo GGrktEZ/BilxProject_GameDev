@@ -1,0 +1,61 @@
+/* ---------------------------------------------------------------------------
+ * Game 3 - Flappris. The page for Flappy Bird and Tetris at the same time.
+ *
+ * The Flappy half is drawn straight onto the body, the same way as in Game 1.
+ * The Tetris half sits in .flappris_panel, which is pinned to the right edge
+ * and lifted above the flying Christians with z-index.
+ *
+ * The blocks themselves are NOT styled here. They are painted onto the canvas,
+ * their colors live in TetrisPieces.js and TetrisRender.js.
+ * --------------------------------------------------------------------------- */
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+body {
+  background-image: url("./../GameAssests/FlappyBird/background.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
+#score {
+  margin: 0;
+  padding: 10px 20px;
+}
+
+.flappris_panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  box-sizing: border-box;
+  height: 100%;
+  padding: 10px 15px;
+  background-color: rgba(20, 0, 25, 0.85);
+  color: white;
+  text-align: center;
+}
+
+.flappris_panel h2 {
+  margin: 0 0 10px;
+}
+
+.tetris_container {
+  /* the game over overlay is placed against this box */
+  position: relative;
+}
+
+#tetris_canvas {
+  display: block;
+}
+
+.flappris_keys {
+  font-size: 0.8em;
+  line-height: 1.6;
+  opacity: 0.75;
+}

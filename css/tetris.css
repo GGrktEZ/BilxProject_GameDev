@@ -23,8 +23,15 @@ body {
   justify-content: center;
   align-items: flex-start;
   gap: 30px;
+  /* the game over overlay is placed against this box */
+  position: relative;
 }
 
 .tetris_sidebar {
   text-align: left;
+}
+
+.epilepsy_warning {
+  font-size: 0.8em;
+  opacity: 0.7;
 }
