@@ -28,6 +28,7 @@ const canvas = document.getElementById("tetris_canvas");
 const context = canvas.getContext("2d");
 
 let lastFrameTime = 0;
+let backgroundColorValue = 0;
 
 canvas.width = CELL_SIZE * COLS;
 canvas.height = CELL_SIZE * ROWS;
@@ -64,6 +65,10 @@ function gameLoop(currentTime) {
   lastFrameTime = currentTime;
   if (!state.isGameOver) {
     state.dropCounter += deltaTime;
+    backgroundColorValue = (backgroundColorValue + 1) % 16777216;
+    document.body.style.backgroundColor = `#${backgroundColorValue
+      .toString(16)
+      .padStart(6, "0")}`;
     if (state.dropCounter > state.dropInterval) {
       dropPieceOneRow();
       state.dropCounter = 0;

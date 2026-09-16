@@ -23,8 +23,8 @@
 // small, that is fast enough - do not try to be clever here.
 // ---------------------------------------------------------------------------
 
-const CELL_SIZE = 25;
-const BACKGROUND_COLOR = "#300435";
+const CELL_SIZE = 27.5;
+let BACKGROUND_COLOR = "#300435";
 const GRID_COLOR = "#c35cff";
 
 function drawBlock(context, col, row, colorIndex) {
@@ -81,8 +81,8 @@ function drawGame(context, state) {
   context.fillStyle = BACKGROUND_COLOR;
   context.fillRect(0, 0, COLS * CELL_SIZE, ROWS * CELL_SIZE);
 
-  drawGrid(context);
   drawBoard(context, state.board);
+  drawGrid(context);
   drawPiece(context, state.piece);
 
   if (state.isGameOver) {
