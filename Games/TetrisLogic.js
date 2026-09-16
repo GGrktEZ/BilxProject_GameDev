@@ -187,15 +187,9 @@ function clearFullRows(board) {
   }
 }
 
-function clearFullRows(board) {
-  for (let row = ROWS - 1; row >= 0; row--) {
-    const isFull = !board[row].includes(0);
-
-    if (!isFull) {
-      continue;
-    }
-    board.splice(row, 1);
-    board.unshift(new Array(COLS).fill(0));
-    row++;
-  }
+function resetGame() {
+  state.board = createEmptyBoard();
+  state.isGameOver = false;
+  state.dropCounter = 0;
+  spawnPiece();
 }
