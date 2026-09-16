@@ -165,7 +165,7 @@ function rotatePiece() {
   if (state.isGameOver) {
     return false;
   }
-  const newRotate = state.piece.rotation + (1 % 4);
+  const newRotate = (state.piece.rotation + 1) % 4;
   const newShape = PIECES[state.piece.type][newRotate];
   if (!isValidPosition(state.board, newShape, state.piece.x, state.piece.y)) {
     return false;
