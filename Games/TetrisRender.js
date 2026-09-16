@@ -81,4 +81,27 @@ function drawGame(context, state) {
   drawGrid(context);
   drawBoard(context, state.board);
   drawPiece(context, state.piece);
+
+  if (state.isGameOver) {
+    let overlay = document.getElementById("tetris-game-over");
+
+    if (!overlay) {
+      overlay = document.createElement("div");
+      overlay.id = "tetris-game-over";
+      overlay.textContent = "GAME OVER";
+      Object.assign(overlay.style, {
+        position: "fixed",
+        inset: "0",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "rgba(0, 0, 0, 0.7)",
+        color: "white",
+        font: "bold 60px sans-serif",
+      });
+      document.body.appendChild(overlay);
+    }
+  } else {
+    document.getElementById("tetris-game-over")?.remove();
+  }
 }

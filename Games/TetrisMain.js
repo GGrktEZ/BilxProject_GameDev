@@ -72,5 +72,6 @@ function gameLoop(currentTime) {
   drawGame(context, state);
   requestAnimationFrame(gameLoop);
 }
+
 resetGame();
 requestAnimationFrame(gameLoop);
