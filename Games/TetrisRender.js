@@ -25,6 +25,7 @@
 
 const CELL_SIZE = 25;
 const BACKGROUND_COLOR = "#300435";
+const GRID_COLOR = "#c35cff";
 
 function drawBlock(context, col, row, colorIndex) {
   const x = col * CELL_SIZE;
@@ -37,6 +38,8 @@ function drawBlock(context, col, row, colorIndex) {
   context.strokeRect(x, y, CELL_SIZE, CELL_SIZE);
 }
 function drawGrid(context) {
+  context.strokeStyle = GRID_COLOR;
+  context.lineWidth = 0.1;
   for (let row = 0; row < ROWS; row++) {
     for (let col = 0; col < COLS; col++) {
       context.strokeRect(
