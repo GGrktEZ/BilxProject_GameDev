@@ -27,10 +27,50 @@
 const canvas = document.getElementById("tetris_canvas");
 const context = canvas.getContext("2d");
 
+let lastFrameTime = 0;
+
 canvas.width = CELL_SIZE * COLS;
 canvas.height = CELL_SIZE * ROWS;
 
+document.addEventListener("keydown", (event) => {
+  if (event.code === "ArrowLeft") {
+    movePiece(-1);
+  }
+  if (event.code === "ArrowRight") {
+    movePiece(1);
+  }
+  if (event.code === "ArrowDown") {
+    dropPieceOneRow();
+    state.dropCounter = 0;
+  }
+  if (event.code === "ArrowUp") {
+    rotatePiece();
+  }
+  if (event.code === "Space") {
+    hardDrop();
+    state.dropCounter = 0;
+  }
+  if (
+    ["ArrowLeft", "ArrowRight", "ArrowDown", "ArrowUp", "Space"].includes(
+      event.code,
+    )
+  ) {
+    event.preventDefault();
+  }
+});
 
-
-drawPiece(context, { type: PIECE_Z, rotation: 0, x: 4, y: 4 });
-
+function gameLoop(currentTime) {
+  const deltaTime = currentTime - lastFrameTime;
+  lastFrameTime = currentTime;
+  if (!state.isGameOver) {
+    state.dropCounter += deltaTime;
+    if (state.dropCounter > state.dropInterval) {
+      dropPieceOneRow();
+      state.dropCounter = 0;
+    }
+  }
+  drawGame(context, state);
+  requestAnimationFrame(gameLoop);
+}
+resetGame();
+requestAnimationFrame(gameLoop);

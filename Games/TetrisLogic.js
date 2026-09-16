@@ -33,77 +33,88 @@
 const ROWS = 20;
 const COLS = 10;
 
-
 // ---------------------------------------------------------------------------
 // Help us
 // ---------------------------------------------------------------------------
 function getShape(piece) {
-  return (PIECES[piece.type] [piece.rotation]);
+  return PIECES[piece.type][piece.rotation];
 }
 const state = {
-  board : [],
-  piece : null,
-  dropInterval : 1000,
+  board: [],
+  piece: null,
+  dropInterval: 1000,
+  dropCounter: 0,
   isGameOver: false,
-}
-function createEmptyBoard () {
+};
+
+function createEmptyBoard() {
   const board = [];
   for (let row = 0; row < ROWS; row++) {
-     board.push(new Array (COLS).fill (0))
+    board.push(new Array(COLS).fill(0));
   }
-  return board
+  return board;
 }
-function isValidPosition (board, shape, x, y) {
+function isValidPosition(board, shape, x, y) {
   for (let row = 0; row < shape.lengnt; row++) {
     for (let col = 0; col < shape[row].lengnt; col++) {
       if (shape[row][col] === 0) {
-        continue
+        continue;
       }
 
-      const boardX = x+col
-      const boardY = y+row
-      if (boardX >= COLS ||  boardX < 0 || boardY >= ROWS) {
-        return false
+      const boardX = x + col;
+      const boardY = y + row;
+      if (boardX >= COLS || boardX < 0 || boardY >= ROWS) {
+        return false;
       }
 
       if (boardY < 0) {
-        continue
+        continue;
       }
-      
-      if (board[boardX][boardY] !== 0){
-        return false
+
+      if (board[boardX][boardY] !== 0) {
+        return false;
       }
     }
   }
-  return true
+  return true;
 }
 
-function spawnPiece () {
-  const type = PIECE_TYPES [Math.floor (Math.random * PIECE_TYPES.length)]
+function spawnPiece() {
+  const type = PIECE_TYPES[Math.floor(Math.random * PIECE_TYPES.length)];
 
-  state.piece = { 
-    type : type,
+  state.piece = {
+    type: type,
     rotation: 0,
     x: COLS / 2,
-    y: 0
-  }
+    y: 0,
+  };
 
-  if (!isValidPosition(state.board, getShape(state.piece),state.shape.x, state.shape.y)) {
-    state.isGameOver = true 
+  if (
+    !isValidPosition(
+      state.board,
+      getShape(state.piece),
+      state.shape.x,
+      state.shape.y,
+    )
+  ) {
+    state.isGameOver = true;
   }
 }
 
-function movePiece (stepX) {
-   if (state.isGameOver) {
-    return false
-   }
-   const newX = state.piece.x + stepX; 
-   if (!isValidPosition(state.board, getShape(state.piece),newX, state.piece.y)) {
-     return false
-   }
-   state.piece.x = newX
+function movePiece(stepX) {
+  if (state.isGameOver) {
+    return false;
+  }
 
-   return true
+  const newX = state.piece.x + stepX;
+
+  if (
+    !isValidPosition(state.board, getShape(state.piece), newX, state.piece.y)
+  ) {
+    return false;
+  }
+  state.piece.x = newX;
+  return true;
 }
 
 function lockPiece() {
@@ -128,27 +139,46 @@ function lockPiece() {
   spawnPiece();
 }
 
+function dropPieceOneRow() {
+  if (state.isGameOver) {
+    return false;
+  }
 
-function dropPieceOneRow () {
-     if (state.isGameOver) {
-    return false
-   }
-
-  const newY = state.piece.y +1; 
-   if (!isValidPosition(state.board, getShape(state.piece),state.piece.x, newY)) {
+  const newY = state.piece.y + 1;
+  if (
+    !isValidPosition(state.board, getShape(state.piece), state.piece.x, newY)
+  ) {
     lockPiece();
-     return false
-   }
-   
-   state.piece.y = newY;
+    return false;
+  }
 
-   return true
+  state.piece.y = newY;
+
+  return true;
 }
 
-function hardDrop () {
-if (isGameOver) {
-  return false
-}
+function hardDrop() {
+  if (isGameOver) {
+    return false;
+  }
   while (dropPieceOneRow()) {}
 }
 
+function rotatePiece() {
+  if (state.isGameOver) {
+    return false;
+  }
+  const newRotation = (state.piece.rotation + 1) % 4;
+  const newShape = PIECES[state.piece.type][newRotation];
+  if (isValidPosition(state.board, newShape, state.piece.x, state.piece.y)) {
+    state.piece.rotation = newRotation;
+  }
+  return false;
+}
+
+function resetGame() {
+  state.board = createEmptyBoard();
+  state.isGameOver = false;
+  state.dropCounter = 0;
+  spawnPiece();
+}
