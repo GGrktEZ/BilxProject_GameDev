@@ -43,10 +43,8 @@ const state = {
   board: [],
   piece: null,
   dropInterval: 1000,
-  dropCounter: 0,
   isGameOver: false,
 };
-
 function createEmptyBoard() {
   const board = [];
   for (let row = 0; row < ROWS; row++) {
@@ -105,15 +103,14 @@ function movePiece(stepX) {
   if (state.isGameOver) {
     return false;
   }
-
   const newX = state.piece.x + stepX;
-
   if (
     !isValidPosition(state.board, getShape(state.piece), newX, state.piece.y)
   ) {
     return false;
   }
   state.piece.x = newX;
+
   return true;
 }
 
@@ -168,12 +165,13 @@ function rotatePiece() {
   if (state.isGameOver) {
     return false;
   }
-  const newRotation = (state.piece.rotation + 1) % 4;
-  const newShape = PIECES[state.piece.type][newRotation];
-  if (isValidPosition(state.board, newShape, state.piece.x, state.piece.y)) {
-    state.piece.rotation = newRotation;
+  const newRotate = state.piece.rotation + (1 % 4);
+  const newShape = PIECES[state.piece.type][newRotate];
+  if (!isValidPosition(state.board, newShape, state.piece.x, state.piece.y)) {
+    return false;
   }
-  return false;
+  state.piece.rotation = newRotate;
+  return true;
 }
 
 function clearFullRows(board) {
@@ -189,9 +187,15 @@ function clearFullRows(board) {
   }
 }
 
-function resetGame() {
-  state.board = createEmptyBoard();
-  state.isGameOver = false;
-  state.dropCounter = 0;
-  spawnPiece();
+function clearFullRows(board) {
+  for (let row = ROWS - 1; row >= 0; row--) {
+    const isFull = !board[row].includes(0);
+
+    if (!isFull) {
+      continue;
+    }
+    board.splice(row, 1);
+    board.unshift(new Array(COLS).fill(0));
+    row++;
+  }
 }
