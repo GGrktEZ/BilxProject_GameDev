@@ -17,12 +17,25 @@
     </div>
     <h1 id="gameOverH1"></h1>
 
-    <button id="epilepsy_button" type="button" aria-pressed="false">
-      Epilepsy mode: off
-    </button>
+    <!-- Every step keeps the ones before it, so going down the list is the
+         order the mode was built in. TetrisRender.js holds the same list. -->
+    <label class="epilepsy_picker">
+      Epilepsy mode:
+      <select id="epilepsy_level">
+        <option value="0">0 - off</option>
+        <option value="1">1 - the page changes color</option>
+        <option value="2">2 - and the board too</option>
+        <option value="3">3 - and the blocks too</option>
+        <option value="4">4 - the board spins</option>
+        <option value="5">5 - the spin swings left and right</option>
+        <option value="6">6 - the board pulses in size</option>
+        <option value="7">7 - the board slides across the screen</option>
+      </select>
+    </label>
     <p class="epilepsy_warning">
-      Warning: epilepsy mode shifts all colors non-stop and can be unsafe for
-      people with photosensitive epilepsy.
+      Warning: from level 1 on the page shifts color non-stop, and the higher
+      levels move the board as well. This can be unsafe for people with
+      photosensitive epilepsy.
     </p>
 
     <!-- The order matters. Every file uses things from the files above it:

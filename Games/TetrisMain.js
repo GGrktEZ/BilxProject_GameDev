@@ -32,17 +32,14 @@ let lastFrameTime = 0;
 canvas.width = CELL_SIZE * COLS;
 canvas.height = CELL_SIZE * ROWS;
 
-const epilepsyButton = document.getElementById("epilepsy_button");
+const epilepsyPicker = document.getElementById("epilepsy_level");
 
-epilepsyButton.addEventListener("click", () => {
-  setEpilepsyMode(!epilepsyMode);
-  epilepsyButton.setAttribute("aria-pressed", String(epilepsyMode));
-  epilepsyButton.textContent = epilepsyMode
-    ? "Epilepsy mode: on"
-    : "Epilepsy mode: off";
+epilepsyPicker.addEventListener("change", () => {
+  setEpilepsyLevel(Number(epilepsyPicker.value));
 
-  // the arrow keys and space belong to the game, not to the button
-  epilepsyButton.blur();
+  // A dropdown that keeps the focus would eat the arrow keys and pick another
+  // level with them, so hand the keyboard straight back to the game.
+  epilepsyPicker.blur();
 });
 
 document.addEventListener("keydown", (event) => {
@@ -76,7 +73,7 @@ function gameLoop(currentTime) {
   const deltaTime = currentTime - lastFrameTime;
   lastFrameTime = currentTime;
 
-  advanceEpilepsyColors(deltaTime);
+  advanceEpilepsy(deltaTime);
 
   if (!state.isGameOver) {
     state.dropCounter += deltaTime;
